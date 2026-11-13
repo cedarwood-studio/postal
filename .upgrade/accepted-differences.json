@@ -1,1 +1,32 @@
-[]
+[
+ {
+  "field": "body",
+  "name": "admin: GET /org/acme/settings",
+  "reason": "Active Support 7.2 changed the time zone named Astana from Asia/Dhaka (GMT+06:00) to Asia/Almaty (GMT+05:00), so the time zone select lists Astana under +05:00. Listed in the Rails 7.2 Active Support changelog as 'Updating Astana with Western Kazakhstan TZInfo identifier': https://github.com/rails/rails/blob/v7.2.4/activesupport/CHANGELOG.md",
+  "stage": "S3"
+ },
+ {
+  "field": "body",
+  "name": "admin: GET /settings",
+  "reason": "Active Support 7.2 changed the time zone named Astana from Asia/Dhaka (GMT+06:00) to Asia/Almaty (GMT+05:00), so the time zone select lists Astana under +05:00. Listed in the Rails 7.2 Active Support changelog as 'Updating Astana with Western Kazakhstan TZInfo identifier': https://github.com/rails/rails/blob/v7.2.4/activesupport/CHANGELOG.md",
+  "stage": "S3"
+ },
+ {
+  "field": "body",
+  "name": "admin: PATCH /org/acme/settings invalid",
+  "reason": "Active Support 7.2 changed the time zone named Astana from Asia/Dhaka (GMT+06:00) to Asia/Almaty (GMT+05:00), so the time zone select lists Astana under +05:00. Listed in the Rails 7.2 Active Support changelog as 'Updating Astana with Western Kazakhstan TZInfo identifier': https://github.com/rails/rails/blob/v7.2.4/activesupport/CHANGELOG.md",
+  "stage": "S3"
+ },
+ {
+  "field": "body",
+  "name": "admin: PATCH /settings invalid",
+  "reason": "Active Support 7.2 changed the time zone named Astana from Asia/Dhaka (GMT+06:00) to Asia/Almaty (GMT+05:00), so the time zone select lists Astana under +05:00. Listed in the Rails 7.2 Active Support changelog as 'Updating Astana with Western Kazakhstan TZInfo identifier': https://github.com/rails/rails/blob/v7.2.4/activesupport/CHANGELOG.md",
+  "stage": "S3"
+ },
+ {
+  "field": "body",
+  "name": "member: GET /org/acme/settings",
+  "reason": "Active Support 7.2 changed the time zone named Astana from Asia/Dhaka (GMT+06:00) to Asia/Almaty (GMT+05:00), so the time zone select lists Astana under +05:00. Listed in the Rails 7.2 Active Support changelog as 'Updating Astana with Western Kazakhstan TZInfo identifier': https://github.com/rails/rails/blob/v7.2.4/activesupport/CHANGELOG.md",
+  "stage": "S3"
+ }
+]
