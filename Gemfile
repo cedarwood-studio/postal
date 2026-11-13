@@ -51,7 +51,6 @@ group :development, :assets do
 end
 
 group :development do
-  gem "annotate"
   gem "rubocop"
   gem "rubocop-rails"
 end
