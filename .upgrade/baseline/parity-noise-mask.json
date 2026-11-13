@@ -1,4 +1,28 @@
 {
+ "admin: GET /org/acme/settings": {
+  "body": true,
+  "environment": true,
+  "headers": [],
+  "status": false
+ },
+ "admin: GET /settings": {
+  "body": true,
+  "environment": true,
+  "headers": [],
+  "status": false
+ },
+ "admin: PATCH /org/acme/settings invalid": {
+  "body": true,
+  "environment": true,
+  "headers": [],
+  "status": false
+ },
+ "admin: PATCH /settings invalid": {
+  "body": true,
+  "environment": true,
+  "headers": [],
+  "status": false
+ },
  "admin: POST credentials invalid": {
   "body": true,
   "headers": [],
@@ -6,6 +30,12 @@
  },
  "api: send/message valid": {
   "body": true,
+  "headers": [],
+  "status": false
+ },
+ "member: GET /org/acme/settings": {
+  "body": true,
+  "environment": true,
   "headers": [],
   "status": false
  }

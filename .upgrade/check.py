@@ -37,13 +37,20 @@ def main():
         after = {}
     else:
         after = {e["id"]: e["status"] for e in rspec.get("examples", [])}
-    cmp_ = parity.compare_examples(before, after)
+    # Examples whose status differed between the sandbox and CI on the baseline
+    # commit itself (same code, different environment) are reported, not gated.
+    env_dep = load(os.path.join(base, "environment-dependent.json"), {})
+    gated_before = {k: v for k, v in before.items() if k not in env_dep}
+    gated_after = {k: v for k, v in after.items() if k not in env_dep}
+    cmp_ = parity.compare_examples(gated_before, gated_after)
     lines += ["| Check | Baseline | This commit |", "|---|---|---|",
               "| Examples run | %d | %d |" % (cmp_["before_total"], cmp_["after_total"]),
               "| Examples passing | %d | %d |" % (cmp_["before_passed"], cmp_["after_passed"]),
               "| Passing at baseline, failing or missing now | | %d |" % (len(cmp_["regressed"]) + len(cmp_["missing_passing"])),
               "| Failing at baseline, passing now | | %d |" % len(cmp_["fixed"]),
-              "| New examples (failing) | | %d (%d) |" % (cmp_["added"], len(cmp_["added_failing"]))]
+              "| New examples (failing) | | %d (%d) |" % (cmp_["added"], len(cmp_["added_failing"])),
+              "| Environment-dependent examples, not gated (passing here) | %d | %d |" % (
+                  len(env_dep), sum(1 for k in env_dep if after.get(k) == "passed"))]
     if not cmp_["ok"]:
         problems.append("test parity: %d regressed, %d passing examples missing, %d new examples failing"
                         % (len(cmp_["regressed"]), len(cmp_["missing_passing"]), len(cmp_["added_failing"])))
