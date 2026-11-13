@@ -1,0 +1,54 @@
+# Added by the upgrade process. Runs the parity checks that gate each stage:
+# the test suite and the recorded HTTP behaviors, compared with the baseline
+# in .upgrade/baseline/. It does not deploy or publish anything.
+name: Upgrade parity
+on:
+  push:
+    branches: ['upgrade/**']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  parity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    services:
+      mariadb:
+        image: mariadb:11
+        env:
+          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    env:
+      LOGGING_ENABLED: "false"
+      MAIN_DB_HOST: "127.0.0.1"
+      MAIN_DB_USERNAME: "root"
+      MESSAGE_DB_HOST: "127.0.0.1"
+      MESSAGE_DB_USERNAME: "root"
+      POSTAL_SIGNING_KEY_PATH: "${{ github.workspace }}/docker/ci-config/signing.key"
+      RAILS_ENV: "test"
+      RAILS_ENVIRONMENT: "test"
+      RAILS_LOG_ENABLED: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libmariadb-dev libyaml-dev
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - run: "mariadb -h 127.0.0.1 -u root -e 'CREATE DATABASE IF NOT EXISTS postal' || mysql -h 127.0.0.1 -u root -e 'CREATE DATABASE IF NOT EXISTS postal'"
+      - name: Test suite
+        run: |
+          mkdir -p .upgrade/out
+          bundle exec rspec --format progress --format json --out .upgrade/out/rspec.json 2>&1 | tee .upgrade/out/test-output.txt || true
+      - name: Record HTTP behaviors
+        run: bundle exec ruby .upgrade/parity_record.rb .upgrade/parity-inputs.json .upgrade/out/parity.json || true
+      - name: Parity check
+        run: python3 .upgrade/check.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: upgrade-parity
+          path: .upgrade/out
+          include-hidden-files: true

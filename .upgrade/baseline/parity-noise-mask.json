@@ -1,0 +1,12 @@
+{
+ "admin: POST credentials invalid": {
+  "body": true,
+  "headers": [],
+  "status": false
+ },
+ "api: send/message valid": {
+  "body": true,
+  "headers": [],
+  "status": false
+ }
+}

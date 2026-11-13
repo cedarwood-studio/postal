@@ -1,0 +1,1120 @@
+{
+ "auto_get_routes": true,
+ "host": "postal.example.com",
+ "requests": [
+  {
+   "method": "GET",
+   "name": "signed out: GET /",
+   "path": "/",
+   "session": "anon"
+  },
+  {
+   "method": "GET",
+   "name": "signed out: GET /login",
+   "path": "/login",
+   "session": "anon"
+  },
+  {
+   "method": "GET",
+   "name": "signed out: GET /login with return_to",
+   "path": "/login?return_to=%2Forg%2Facme",
+   "session": "anon"
+  },
+  {
+   "method": "GET",
+   "name": "signed out: GET /org/acme",
+   "path": "/org/acme",
+   "session": "anon"
+  },
+  {
+   "method": "GET",
+   "name": "signed out: GET /org/acme/servers/mail/messages/outgoing",
+   "path": "/org/acme/servers/mail/messages/outgoing",
+   "session": "anon"
+  },
+  {
+   "method": "GET",
+   "name": "signed out: GET /users",
+   "path": "/users",
+   "session": "anon"
+  },
+  {
+   "method": "GET",
+   "name": "signed out: GET /ip",
+   "path": "/ip",
+   "session": "anon"
+  },
+  {
+   "method": "GET",
+   "name": "signed out: GET /.well-known/jwks.json",
+   "path": "/.well-known/jwks.json",
+   "session": "anon"
+  },
+  {
+   "method": "GET",
+   "name": "signed out: GET unknown path",
+   "path": "/no/such/page",
+   "session": "anon"
+  },
+  {
+   "method": "POST",
+   "name": "signed out: POST /login wrong password",
+   "params": {
+    "email_address": "admin@example.com",
+    "password": "wrong"
+   },
+   "path": "/login",
+   "session": "anon"
+  },
+  {
+   "method": "POST",
+   "name": "signed out: POST /login unknown user",
+   "params": {
+    "email_address": "nobody@example.com",
+    "password": "passw0rd"
+   },
+   "path": "/login",
+   "session": "anon"
+  },
+  {
+   "method": "GET",
+   "name": "signed out: GET /login/reset",
+   "path": "/login/reset",
+   "session": "anon"
+  },
+  {
+   "method": "POST",
+   "name": "signed out: POST /login/reset unknown address",
+   "params": {
+    "email_address": "nobody@example.com"
+   },
+   "path": "/login/reset",
+   "session": "anon"
+  },
+  {
+   "method": "GET",
+   "name": "signed out: GET /login after reset alert",
+   "path": "/login/reset",
+   "session": "anon"
+  },
+  {
+   "method": "GET",
+   "name": "signed out: GET /login/reset/:token valid",
+   "path": "/login/reset/parityresettoken000000001",
+   "session": "anon"
+  },
+  {
+   "method": "POST",
+   "name": "signed out: POST /login/reset/:token blank password",
+   "params": {
+    "password": "",
+    "password_confirmation": ""
+   },
+   "path": "/login/reset/parityresettoken000000001",
+   "session": "anon"
+  },
+  {
+   "method": "GET",
+   "name": "signed out: GET /login/reset/:token unknown",
+   "path": "/login/reset/doesnotexist",
+   "session": "anon"
+  },
+  {
+   "method": "DELETE",
+   "name": "signed out: DELETE /logout",
+   "path": "/logout",
+   "session": "anon"
+  },
+  {
+   "method": "POST",
+   "name": "signed out: POST /persist",
+   "path": "/persist",
+   "session": "anon"
+  },
+  {
+   "method": "POST",
+   "name": "api: send/message without key",
+   "path": "/api/v1/send/message"
+  },
+  {
+   "headers": {
+    "X-Server-API-Key": "invalid"
+   },
+   "method": "POST",
+   "name": "api: send/message invalid key",
+   "path": "/api/v1/send/message"
+  },
+  {
+   "headers": {
+    "X-Server-API-Key": "paritysuspendedkey000001"
+   },
+   "method": "POST",
+   "name": "api: send/message suspended server",
+   "path": "/api/v1/send/message"
+  },
+  {
+   "headers": {
+    "X-Server-API-Key": "parityapikey000000000001"
+   },
+   "method": "POST",
+   "name": "api: send/message no params",
+   "path": "/api/v1/send/message"
+  },
+  {
+   "headers": {
+    "X-Server-API-Key": "parityapikey000000000001"
+   },
+   "method": "POST",
+   "name": "api: send/message unauthenticated from domain",
+   "params": {
+    "params": "{\"to\":[\"test@example.com\"],\"from\":\"test@not-ours.example.net\",\"subject\":\"Test\",\"plain_body\":\"plain text\"}"
+   },
+   "path": "/api/v1/send/message"
+  },
+  {
+   "headers": {
+    "X-Server-API-Key": "parityapikey000000000001"
+   },
+   "method": "POST",
+   "name": "api: send/raw missing params",
+   "params": {
+    "params": "{}"
+   },
+   "path": "/api/v1/send/raw"
+  },
+  {
+   "headers": {
+    "X-Server-API-Key": "parityapikey000000000001"
+   },
+   "method": "POST",
+   "name": "api: messages/message found with expansions",
+   "params": {
+    "params": "{\"id\":1,\"_expansions\":true}"
+   },
+   "path": "/api/v1/messages/message"
+  },
+  {
+   "headers": {
+    "X-Server-API-Key": "parityapikey000000000001"
+   },
+   "method": "GET",
+   "name": "api: messages/message via GET",
+   "path": "/api/v1/messages/message?params=%7B%22id%22%3A2%7D"
+  },
+  {
+   "headers": {
+    "X-Server-API-Key": "parityapikey000000000001"
+   },
+   "method": "POST",
+   "name": "api: messages/message not found",
+   "params": {
+    "params": "{\"id\":999}"
+   },
+   "path": "/api/v1/messages/message"
+  },
+  {
+   "headers": {
+    "X-Server-API-Key": "parityapikey000000000001"
+   },
+   "method": "POST",
+   "name": "api: messages/message missing id",
+   "path": "/api/v1/messages/message"
+  },
+  {
+   "headers": {
+    "X-Server-API-Key": "parityapikey000000000001"
+   },
+   "method": "POST",
+   "name": "api: messages/message non-scalar id",
+   "params": {
+    "params": "{\"id\":{\"a\":1}}"
+   },
+   "path": "/api/v1/messages/message"
+  },
+  {
+   "headers": {
+    "X-Server-API-Key": "parityapikey000000000001"
+   },
+   "method": "POST",
+   "name": "api: messages/deliveries found",
+   "params": {
+    "params": "{\"id\":1}"
+   },
+   "path": "/api/v1/messages/deliveries"
+  },
+  {
+   "headers": {
+    "X-Server-API-Key": "invalid"
+   },
+   "method": "POST",
+   "name": "api: messages/deliveries invalid key",
+   "params": {
+    "params": "{\"id\":1}"
+   },
+   "path": "/api/v1/messages/deliveries"
+  },
+  {
+   "method": "POST",
+   "name": "admin: sign in",
+   "params": {
+    "email_address": "admin@example.com",
+    "password": "passw0rd"
+   },
+   "path": "/login",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET /",
+   "path": "/",
+   "session": "admin"
+  },
+  {
+   "method": "POST",
+   "name": "admin: POST /persist",
+   "path": "/persist",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET /settings",
+   "path": "/settings",
+   "session": "admin"
+  },
+  {
+   "method": "PATCH",
+   "name": "admin: PATCH /settings invalid",
+   "params": {
+    "user": {
+     "email_address": "",
+     "first_name": "",
+     "last_name": ""
+    }
+   },
+   "path": "/settings",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET /organizations/new",
+   "path": "/organizations/new",
+   "session": "admin"
+  },
+  {
+   "method": "POST",
+   "name": "admin: POST /organizations invalid",
+   "params": {
+    "organization": {
+     "name": "",
+     "permalink": ""
+    }
+   },
+   "path": "/organizations",
+   "session": "admin"
+  },
+  {
+   "method": "POST",
+   "name": "admin: POST /organizations.json invalid",
+   "params": {
+    "organization": {
+     "name": "",
+     "permalink": ""
+    }
+   },
+   "path": "/organizations.json",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET /org/acme",
+   "path": "/org/acme",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET /org/nosuch",
+   "path": "/org/nosuch",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET /org/acme/settings",
+   "path": "/org/acme/settings",
+   "session": "admin"
+  },
+  {
+   "method": "PATCH",
+   "name": "admin: PATCH /org/acme/settings invalid",
+   "params": {
+    "organization": {
+     "name": ""
+    }
+   },
+   "path": "/org/acme/settings",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET /org/acme/delete",
+   "path": "/org/acme/delete",
+   "session": "admin"
+  },
+  {
+   "method": "DELETE",
+   "name": "admin: DELETE /org/acme/delete wrong confirm text",
+   "params": {
+    "confirm_text": "wrong"
+   },
+   "path": "/org/acme/delete",
+   "session": "admin"
+  },
+  {
+   "method": "DELETE",
+   "name": "admin: DELETE /org/acme/delete blank confirm text",
+   "path": "/org/acme/delete",
+   "session": "admin"
+  },
+  {
+   "method": "DELETE",
+   "name": "admin: DELETE /org/acme/delete.json wrong confirm text",
+   "params": {
+    "confirm_text": "wrong"
+   },
+   "path": "/org/acme/delete.json",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET /org/acme/domains",
+   "path": "/org/acme/domains",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET /org/acme/domains/new",
+   "path": "/org/acme/domains/new",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET org domain setup",
+   "path": "/org/acme/domains/00000000-0000-4000-8000-000000000031/setup",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET /org/acme/ip_pools",
+   "path": "/org/acme/ip_pools",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET /org/acme/ip_pool_rules",
+   "path": "/org/acme/ip_pool_rules",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET /org/acme/ip_pool_rules/new",
+   "path": "/org/acme/ip_pool_rules/new",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET org ip_pool_rule edit",
+   "path": "/org/acme/ip_pool_rules/00000000-0000-4000-8000-000000000058/edit",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET /org/acme/servers/new",
+   "path": "/org/acme/servers/new",
+   "session": "admin"
+  },
+  {
+   "method": "POST",
+   "name": "admin: POST /org/acme/servers invalid",
+   "params": {
+    "server": {
+     "mode": "",
+     "name": ""
+    }
+   },
+   "path": "/org/acme/servers",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server",
+   "path": "/org/acme/servers/mail",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server unknown",
+   "path": "/org/acme/servers/nosuch",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server edit",
+   "path": "/org/acme/servers/mail/edit",
+   "session": "admin"
+  },
+  {
+   "method": "PATCH",
+   "name": "admin: PATCH server invalid",
+   "params": {
+    "server": {
+     "name": ""
+    }
+   },
+   "path": "/org/acme/servers/mail",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server limits",
+   "path": "/org/acme/servers/mail/limits",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server retention",
+   "path": "/org/acme/servers/mail/retention",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server queue",
+   "path": "/org/acme/servers/mail/queue",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server spam",
+   "path": "/org/acme/servers/mail/spam",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server delete",
+   "path": "/org/acme/servers/mail/delete",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server advanced",
+   "path": "/org/acme/servers/mail/advanced",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server help/outgoing",
+   "path": "/org/acme/servers/mail/help/outgoing",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server help/incoming",
+   "path": "/org/acme/servers/mail/help/incoming",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET suspended server",
+   "path": "/org/acme/servers/suspended/edit",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server domains",
+   "path": "/org/acme/servers/mail/domains",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server domains/new",
+   "path": "/org/acme/servers/mail/domains/new",
+   "session": "admin"
+  },
+  {
+   "method": "POST",
+   "name": "admin: POST server domains invalid",
+   "params": {
+    "domain": {
+     "name": "",
+     "verification_method": "DNS"
+    }
+   },
+   "path": "/org/acme/servers/mail/domains",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server domain setup",
+   "path": "/org/acme/servers/mail/domains/00000000-0000-4000-8000-000000000030/setup",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server domain verify (unverified)",
+   "path": "/org/acme/servers/mail/domains/00000000-0000-4000-8000-000000000032/verify",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server domain verify (already verified)",
+   "path": "/org/acme/servers/mail/domains/00000000-0000-4000-8000-000000000030/verify",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET credentials",
+   "path": "/org/acme/servers/mail/credentials",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET credentials/new",
+   "path": "/org/acme/servers/mail/credentials/new",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET credential edit",
+   "path": "/org/acme/servers/mail/credentials/00000000-0000-4000-8000-000000000040/edit",
+   "session": "admin"
+  },
+  {
+   "method": "POST",
+   "name": "admin: POST credentials invalid",
+   "params": {
+    "credential": {
+     "name": "",
+     "type": "API"
+    }
+   },
+   "path": "/org/acme/servers/mail/credentials",
+   "session": "admin"
+  },
+  {
+   "method": "POST",
+   "name": "admin: POST credentials.json invalid",
+   "params": {
+    "credential": {
+     "name": "",
+     "type": "API"
+    }
+   },
+   "path": "/org/acme/servers/mail/credentials.json",
+   "session": "admin"
+  },
+  {
+   "method": "PATCH",
+   "name": "admin: PATCH credential.json valid",
+   "params": {
+    "credential": {
+     "hold": "1",
+     "name": "SMTP Credential renamed"
+    }
+   },
+   "path": "/org/acme/servers/mail/credentials/00000000-0000-4000-8000-000000000041.json",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET routes",
+   "path": "/org/acme/servers/mail/routes",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET routes/new",
+   "path": "/org/acme/servers/mail/routes/new",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET route edit",
+   "path": "/org/acme/servers/mail/routes/00000000-0000-4000-8000-000000000053/edit",
+   "session": "admin"
+  },
+  {
+   "method": "POST",
+   "name": "admin: POST routes invalid",
+   "params": {
+    "route": {
+     "mode": "Accept",
+     "name": ""
+    }
+   },
+   "path": "/org/acme/servers/mail/routes",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET http_endpoints",
+   "path": "/org/acme/servers/mail/http_endpoints",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET http_endpoints/new",
+   "path": "/org/acme/servers/mail/http_endpoints/new",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET http_endpoint edit",
+   "path": "/org/acme/servers/mail/http_endpoints/00000000-0000-4000-8000-000000000050/edit",
+   "session": "admin"
+  },
+  {
+   "method": "POST",
+   "name": "admin: POST http_endpoints invalid",
+   "params": {
+    "http_endpoint": {
+     "name": "",
+     "url": "not a url"
+    }
+   },
+   "path": "/org/acme/servers/mail/http_endpoints",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET smtp_endpoints",
+   "path": "/org/acme/servers/mail/smtp_endpoints",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET smtp_endpoints/new",
+   "path": "/org/acme/servers/mail/smtp_endpoints/new",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET smtp_endpoint edit",
+   "path": "/org/acme/servers/mail/smtp_endpoints/00000000-0000-4000-8000-000000000051/edit",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET address_endpoints",
+   "path": "/org/acme/servers/mail/address_endpoints",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET address_endpoints/new",
+   "path": "/org/acme/servers/mail/address_endpoints/new",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET address_endpoint edit",
+   "path": "/org/acme/servers/mail/address_endpoints/00000000-0000-4000-8000-000000000052/edit",
+   "session": "admin"
+  },
+  {
+   "method": "POST",
+   "name": "admin: POST address_endpoints invalid",
+   "params": {
+    "address_endpoint": {
+     "address": "not-an-address"
+    }
+   },
+   "path": "/org/acme/servers/mail/address_endpoints",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET webhooks",
+   "path": "/org/acme/servers/mail/webhooks",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET webhooks/new",
+   "path": "/org/acme/servers/mail/webhooks/new",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET webhook edit",
+   "path": "/org/acme/servers/mail/webhooks/00000000-0000-4000-8000-000000000054/edit",
+   "session": "admin"
+  },
+  {
+   "method": "POST",
+   "name": "admin: POST webhooks invalid",
+   "params": {
+    "webhook": {
+     "name": "",
+     "url": ""
+    }
+   },
+   "path": "/org/acme/servers/mail/webhooks",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET webhooks history",
+   "path": "/org/acme/servers/mail/webhooks/history",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET webhooks history request",
+   "path": "/org/acme/servers/mail/webhooks/history/00000000-0000-4000-8000-000000000055",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET track_domains",
+   "path": "/org/acme/servers/mail/track_domains",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET track_domains/new",
+   "path": "/org/acme/servers/mail/track_domains/new",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET track_domain edit",
+   "path": "/org/acme/servers/mail/track_domains/00000000-0000-4000-8000-000000000056/edit",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server ip_pool_rules",
+   "path": "/org/acme/servers/mail/ip_pool_rules",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server ip_pool_rules/new",
+   "path": "/org/acme/servers/mail/ip_pool_rules/new",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET server ip_pool_rule edit",
+   "path": "/org/acme/servers/mail/ip_pool_rules/00000000-0000-4000-8000-000000000057/edit",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET messages/outgoing",
+   "path": "/org/acme/servers/mail/messages/outgoing",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET messages/outgoing with query",
+   "path": "/org/acme/servers/mail/messages/outgoing?query=to%3Ajohn%40example.com+order%3Aoldest-first",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET messages/outgoing with bad time query",
+   "path": "/org/acme/servers/mail/messages/outgoing?query=before%3Anonsense",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET messages/outgoing.json",
+   "path": "/org/acme/servers/mail/messages/outgoing.json?query=to%3Ajohn%40example.com",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET messages/incoming",
+   "path": "/org/acme/servers/mail/messages/incoming?query=",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET messages/held",
+   "path": "/org/acme/servers/mail/messages/held",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET messages/suppressions",
+   "path": "/org/acme/servers/mail/messages/suppressions",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET messages/new",
+   "path": "/org/acme/servers/mail/messages/new",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET message",
+   "path": "/org/acme/servers/mail/messages/1",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET message unknown",
+   "path": "/org/acme/servers/mail/messages/999",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET message activity",
+   "path": "/org/acme/servers/mail/messages/1/activity",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET message plain",
+   "path": "/org/acme/servers/mail/messages/1/plain",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET message html",
+   "path": "/org/acme/servers/mail/messages/1/html",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET message html_raw",
+   "path": "/org/acme/servers/mail/messages/1/html_raw",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET message attachments",
+   "path": "/org/acme/servers/mail/messages/1/attachments",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET message attachment download",
+   "path": "/org/acme/servers/mail/messages/1/attachment?attachment=0",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET message attachment missing",
+   "path": "/org/acme/servers/mail/messages/1/attachment?attachment=7",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET message headers",
+   "path": "/org/acme/servers/mail/messages/1/headers",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET message download",
+   "path": "/org/acme/servers/mail/messages/1/download",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET message spam_checks",
+   "path": "/org/acme/servers/mail/messages/2/spam_checks",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET message deliveries",
+   "path": "/org/acme/servers/mail/messages/1/deliveries",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET incoming message",
+   "path": "/org/acme/servers/mail/messages/2",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET held message",
+   "path": "/org/acme/servers/mail/messages/3",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET /users",
+   "path": "/users",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET /users/new",
+   "path": "/users/new",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET user edit",
+   "path": "/users/00000000-0000-4000-8000-000000000003/edit",
+   "session": "admin"
+  },
+  {
+   "method": "POST",
+   "name": "admin: POST /users invalid",
+   "params": {
+    "user": {
+     "email_address": "",
+     "first_name": "",
+     "last_name": ""
+    }
+   },
+   "path": "/users",
+   "session": "admin"
+  },
+  {
+   "method": "PATCH",
+   "name": "admin: PATCH own admin status.json",
+   "params": {
+    "user": {
+     "admin": "0"
+    }
+   },
+   "path": "/users/00000000-0000-4000-8000-000000000002.json",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET /ip_pools",
+   "path": "/ip_pools",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET /ip_pools/new",
+   "path": "/ip_pools/new",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET ip_pool edit",
+   "path": "/ip_pools/00000000-0000-4000-8000-000000000001/edit",
+   "session": "admin"
+  },
+  {
+   "method": "POST",
+   "name": "admin: POST /ip_pools invalid",
+   "params": {
+    "ip_pool": {
+     "name": ""
+    }
+   },
+   "path": "/ip_pools",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET ip_addresses/new",
+   "path": "/ip_pools/00000000-0000-4000-8000-000000000001/ip_addresses/new",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET ip_address edit",
+   "path": "/ip_pools/00000000-0000-4000-8000-000000000001/ip_addresses/9001/edit",
+   "session": "admin"
+  },
+  {
+   "method": "DELETE",
+   "name": "admin: DELETE /logout",
+   "path": "/logout",
+   "session": "admin"
+  },
+  {
+   "method": "GET",
+   "name": "admin: GET / after sign out",
+   "path": "/",
+   "session": "admin"
+  },
+  {
+   "method": "POST",
+   "name": "member: sign in with return_to",
+   "params": {
+    "email_address": "member@example.com",
+    "password": "passw0rd",
+    "return_to": "/org/acme"
+   },
+   "path": "/login",
+   "session": "member"
+  },
+  {
+   "method": "POST",
+   "name": "member: sign in again with unsafe return_to",
+   "params": {
+    "email_address": "member@example.com",
+    "password": "passw0rd",
+    "return_to": "//attacker.example/phish"
+   },
+   "path": "/login",
+   "session": "member"
+  },
+  {
+   "method": "GET",
+   "name": "member: GET /",
+   "path": "/",
+   "session": "member"
+  },
+  {
+   "method": "GET",
+   "name": "member: GET /org/acme",
+   "path": "/org/acme",
+   "session": "member"
+  },
+  {
+   "method": "GET",
+   "name": "member: GET /users (not permitted)",
+   "path": "/users",
+   "session": "member"
+  },
+  {
+   "method": "GET",
+   "name": "member: GET /ip_pools (not permitted)",
+   "path": "/ip_pools",
+   "session": "member"
+  },
+  {
+   "method": "GET",
+   "name": "member: GET /organizations/new (not permitted)",
+   "path": "/organizations/new",
+   "session": "member"
+  },
+  {
+   "method": "GET",
+   "name": "member: GET server advanced (not permitted)",
+   "path": "/org/acme/servers/mail/advanced",
+   "session": "member"
+  },
+  {
+   "method": "GET",
+   "name": "member: GET /org/acme/settings",
+   "path": "/org/acme/settings",
+   "session": "member"
+  },
+  {
+   "headers": {
+    "X-Server-API-Key": "parityapikey000000000001"
+   },
+   "method": "POST",
+   "name": "api: send/message valid",
+   "params": {
+    "params": "{\"to\":[\"test@example.com\"],\"from\":\"test@mail.example.com\",\"subject\":\"Test\",\"plain_body\":\"plain text\",\"html_body\":\"<p>html</p>\",\"tag\":\"test-tag\"}"
+   },
+   "path": "/api/v1/send/message"
+  }
+ ],
+ "setup": ".upgrade/parity-setup.rb"
+}

@@ -1,0 +1,13 @@
+{
+ "commit": "d96eddbadeda600595d6247486f9ceb8e99cbc15",
+ "deprecations_distinct": 0,
+ "deprecations_occurrences": 0,
+ "environment": "sandbox container, network off",
+ "examples_failed": 17,
+ "examples_total": 851,
+ "recorded": "2026-11-13T02:24:34Z",
+ "versions": {
+  "rails": "7.1.6",
+  "ruby": "3.4.6"
+ }
+}
