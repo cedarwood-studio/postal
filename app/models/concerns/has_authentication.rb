@@ -5,7 +5,7 @@ module HasAuthentication
   extend ActiveSupport::Concern
 
   included do
-    has_secure_password validations: false
+    has_secure_password validations: false, reset_token: false
 
     validates :password, length: { minimum: 8, allow_blank: true }
     validates :password, confirmation: { allow_blank: true }
