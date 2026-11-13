@@ -28,5 +28,11 @@
   "name": "member: GET /org/acme/settings",
   "reason": "Active Support 7.2 changed the time zone named Astana from Asia/Dhaka (GMT+06:00) to Asia/Almaty (GMT+05:00), so the time zone select lists Astana under +05:00. Listed in the Rails 7.2 Active Support changelog as 'Updating Astana with Western Kazakhstan TZInfo identifier': https://github.com/rails/rails/blob/v7.2.4/activesupport/CHANGELOG.md",
   "stage": "S3"
+ },
+ {
+  "field": "header:vary",
+  "name": "*",
+  "reason": "From Action Pack 8.0.5.2 a rendered response carries 'Vary: Accept, X-Requested-With' when the response format is not given by the URL; before, this application's responses carried no Vary header. Listed in the Action Pack 8.0 changelog as 'Set and extend the Vary header for rendered responses according to the request headers used in format negotiation': https://github.com/rails/rails/blob/v8.0.5.2/actionpack/CHANGELOG.md",
+  "stage": "S4"
  }
 ]
