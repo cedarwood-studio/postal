@@ -1,24 +1,64 @@
 {
  "admin: GET /org/acme/settings": {
-  "body": true,
+  "body": false,
+  "body_values": {
+   "other_only": [
+    "<option value=\"Casablanca\">(GMT+00:00) Casablanca</option>",
+    "<option value=\"Dublin\">(GMT+00:00) Dublin</option>"
+   ],
+   "reference_only": [
+    "<option value=\"Casablanca\">(GMT+01:00) Casablanca</option>",
+    "<option value=\"Dublin\">(GMT+01:00) Dublin</option>"
+   ]
+  },
   "environment": true,
   "headers": [],
   "status": false
  },
  "admin: GET /settings": {
-  "body": true,
+  "body": false,
+  "body_values": {
+   "other_only": [
+    "<option value=\"Casablanca\">(GMT+00:00) Casablanca</option>",
+    "<option value=\"Dublin\">(GMT+00:00) Dublin</option>"
+   ],
+   "reference_only": [
+    "<option value=\"Casablanca\">(GMT+01:00) Casablanca</option>",
+    "<option value=\"Dublin\">(GMT+01:00) Dublin</option>"
+   ]
+  },
   "environment": true,
   "headers": [],
   "status": false
  },
  "admin: PATCH /org/acme/settings invalid": {
-  "body": true,
+  "body": false,
+  "body_values": {
+   "other_only": [
+    "<option value=\"Casablanca\">(GMT+00:00) Casablanca</option>",
+    "<option value=\"Dublin\">(GMT+00:00) Dublin</option>"
+   ],
+   "reference_only": [
+    "<option value=\"Casablanca\">(GMT+01:00) Casablanca</option>",
+    "<option value=\"Dublin\">(GMT+01:00) Dublin</option>"
+   ]
+  },
   "environment": true,
   "headers": [],
   "status": false
  },
  "admin: PATCH /settings invalid": {
-  "body": true,
+  "body": false,
+  "body_values": {
+   "other_only": [
+    "<option value=\"Casablanca\">(GMT+00:00) Casablanca</option>",
+    "<option value=\"Dublin\">(GMT+00:00) Dublin</option>"
+   ],
+   "reference_only": [
+    "<option value=\"Casablanca\">(GMT+01:00) Casablanca</option>",
+    "<option value=\"Dublin\">(GMT+01:00) Dublin</option>"
+   ]
+  },
   "environment": true,
   "headers": [],
   "status": false
@@ -34,7 +74,17 @@
   "status": false
  },
  "member: GET /org/acme/settings": {
-  "body": true,
+  "body": false,
+  "body_values": {
+   "other_only": [
+    "<option value=\"Casablanca\">(GMT+00:00) Casablanca</option>",
+    "<option value=\"Dublin\">(GMT+00:00) Dublin</option>"
+   ],
+   "reference_only": [
+    "<option value=\"Casablanca\">(GMT+01:00) Casablanca</option>",
+    "<option value=\"Dublin\">(GMT+01:00) Dublin</option>"
+   ]
+  },
   "environment": true,
   "headers": [],
   "status": false

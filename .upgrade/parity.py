@@ -24,6 +24,86 @@ def normalize(body):
     return body
 
 
+SEGMENT = re.compile(r"<[^>]*>|[^<\n]+")
+
+
+def tokens(body):
+    """A body as the units a value mask works on: its lines, and for a line
+    too long to be one value (minified markup), its tags and text runs."""
+    out = []
+    for line in (body or "").split("\n"):
+        if len(line) <= 500:
+            out.append(line)
+        else:
+            out += SEGMENT.findall(line)
+    return out
+
+
+def value_pairs(reference_body, other_body, max_values=40):
+    """The values that differ between two recordings of the same code in two
+    environments: the tokens only the reference has and the tokens only the
+    other has, wherever they sit (a re-sorted list moves its entries).
+    Returns {"reference_only": [...], "other_only": [...]}, or None when the
+    difference cannot be said as a short list of specific values, in which
+    case no value mask can describe it."""
+    a, b = tokens(normalize(reference_body)), tokens(normalize(other_body))
+    only_a, only_b = [], []
+    for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes():
+        if op == "equal":
+            continue
+        only_a += [t for t in a[i1:i2] if t not in only_a]
+        only_b += [t for t in b[j1:j2] if t not in only_b]
+    # a token that merely moved is on both lists and is not an environment value
+    moved = set(only_a) & set(only_b)
+    values = [t for t in only_a + only_b if t not in moved]
+    if not values or len(values) > max_values:
+        return None
+    # a mask of blank lines or bare tags would hide far more than one value
+    if any(len(t.strip()) < 8 or not re.search(r"[A-Za-z0-9]", re.sub(r"<[^>]*>", "", t)) for t in values):
+        return None
+    pairs = {"reference_only": [t for t in only_a if t not in moved], "other_only": [t for t in only_b if t not in moved]}
+    if without_values(normalize(reference_body), pairs) != without_values(normalize(other_body), pairs):
+        return None
+    return pairs
+
+
+def without_values(body, pairs):
+    """The body with every masked value taken out, as a token list. Only an
+    exact, whole token is removed, so any other change to the page still shows."""
+    drop = set(pairs.get("reference_only", [])) | set(pairs.get("other_only", []))
+    return [t for t in tokens(body) if t not in drop]
+
+
+def comparisons(before, mask, env_dependent=0, examples_total=0):
+    """Which comparisons a run actually makes, in numbers a stage record can
+    state: what is compared in full, what through a value mask, what not at all."""
+    names = list(_index(before))
+    full = sum(1 for n in names if not (mask.get(n) or {}).get("body") and not (mask.get(n) or {}).get("body_values"))
+    valued = sum(1 for n in names if (mask.get(n) or {}).get("body_values") and not (mask.get(n) or {}).get("body"))
+    return {"examples_gated": examples_total - env_dependent, "examples_reported_not_gated": env_dependent,
+            "requests": len(names),
+            "status_compared": sum(1 for n in names if not (mask.get(n) or {}).get("status")),
+            "bodies_compared_in_full": full, "bodies_compared_through_value_masks": valued,
+            "bodies_not_compared": len(names) - full - valued,
+            "headers_masked": sum(len((mask.get(n) or {}).get("headers", [])) for n in names)}
+
+
+def masked_declarations(accepted, mask):
+    """Declared differences on a field the mask hides entirely. A declared,
+    sourced difference must stay visible wherever the comparison runs."""
+    out = []
+    for e in accepted or []:
+        for name, m in (mask or {}).items():
+            if e.get("name") not in (name, "*"):
+                continue
+            fld = e.get("field") or ""
+            hidden = ((fld in ("body", "*") and m.get("body")) or (fld in ("status", "error", "*") and m.get("status"))
+                      or (fld.startswith("header:") and fld[7:] in m.get("headers", [])))
+            if hidden and (e.get("name") != "*" or m.get("environment")):
+                out.append({"name": name, "field": fld})
+    return out
+
+
 def _index(rec):
     return {r["name"]: r for r in rec.get("requests", [])}
 
@@ -75,6 +155,8 @@ def compare(before, after, mask=None, max_diff_lines=40):
                                  "after": a.get("cookie_names")})
         if not m.get("body"):
             nb, na = normalize(b.get("body")), normalize(a.get("body"))
+            if nb != na and m.get("body_values"):
+                nb, na = "\n".join(without_values(nb, m["body_values"])), "\n".join(without_values(na, m["body_values"]))
             if nb != na:
                 ud = list(difflib.unified_diff(nb.split("\n"), na.split("\n"), "before", "after",
                                                lineterm="", n=1))

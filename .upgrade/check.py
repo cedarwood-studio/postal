@@ -74,20 +74,44 @@ def main():
             mask = load(os.path.join(base, "parity-noise-mask.json"), {})
             accepted = load(os.path.join(HERE, "accepted-differences.json"), [])
             diff = parity.compare(b_rec, a_rec, mask)
-            unexplained = []
+            unexplained, seen = [], set()
             for d in diff["differences"]:
                 for fld in [c["field"] for c in d.get("changes", [])] or [d.get("kind")]:
-                    if not any(e.get("name") in (d["name"], "*") and e.get("field") in (fld, "*") and e.get("reason")
-                               for e in accepted):
+                    hit = [i for i, e in enumerate(accepted) if e.get("name") in (d["name"], "*")
+                           and e.get("field") in (fld, "*") and e.get("reason")]
+                    seen.update(hit)
+                    if not hit:
                         unexplained.append("%s: %s" % (d["name"], fld))
+            # A declared difference must be visible here. One the mask hides, or
+            # one this run did not observe, means this comparison is weaker
+            # than the stage claims, and that is a failure, not a pass.
+            hidden = parity.masked_declarations(accepted, mask)
+            not_seen = [e for i, e in enumerate(accepted) if i not in seen]
             lines.append("| Recorded HTTP behaviors identical | %d | %d |" % (diff["requests_before"], diff["identical"]))
             lines.append("| Differences with a declared reason / without | | %d / %d |" % (
                 sum(len(d.get("changes", [])) or 1 for d in diff["differences"]) - len(unexplained), len(unexplained)))
+            lines.append("| Declared differences observed here / not observed | | %d / %d |" % (len(seen), len(not_seen)))
+            comp = parity.comparisons(b_rec, mask, env_dependent=len(env_dep), examples_total=len(before))
+            comp.update(declared=len(accepted), declared_observed=len(seen), where="ci")
+            lines += ["", "Comparisons that ran here: %d of %d examples gated (%d reported, not gated); %d requests, "
+                      "status compared on %d, bodies compared in full on %d, through a value mask on %d, not at all on %d."
+                      % (comp["examples_gated"], comp["examples_gated"] + comp["examples_reported_not_gated"],
+                         comp["examples_reported_not_gated"], comp["requests"], comp["status_compared"],
+                         comp["bodies_compared_in_full"], comp["bodies_compared_through_value_masks"],
+                         comp["bodies_not_compared"])]
+            with open(os.path.join(out, "comparisons.json"), "w") as f:
+                json.dump(comp, f, indent=1, sort_keys=True)
             with open(os.path.join(out, "parity-diff.json"), "w") as f:
                 json.dump(diff, f, indent=1)
             if unexplained:
                 problems.append("behavior parity: %d difference(s) with no declared reason: %s"
                                 % (len(unexplained), "; ".join(unexplained[:8])))
+            if hidden:
+                problems.append("a declared difference is hidden by the mask here: %s"
+                                % "; ".join("%s: %s" % (h["name"], h["field"]) for h in hidden[:8]))
+            elif not_seen:
+                problems.append("%d declared difference(s) were not observed in this run: %s"
+                                % (len(not_seen), "; ".join("%s: %s" % (e.get("name"), e.get("field")) for e in not_seen[:8])))
             rw = a_rec.get("recorded_with") or {}
             lines += ["", "Recorded on Rails %s, Ruby %s." % (rw.get("rails"), rw.get("ruby"))]
     lines += ["", "**Result:** " + ("parity holds." if not problems else "parity does not hold.")]
